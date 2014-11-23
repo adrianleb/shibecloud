@@ -4,8 +4,6 @@ Array::diff = (a) ->
   @filter (i) ->
     a.indexOf(i) < 0
 
-
-
 React       = require("react")
 ReactAsync  = require("react-async")
 ReactRouter = require("react-router-component")
@@ -20,29 +18,16 @@ Link        = ReactRouter.Link
 
 
 
-
-
-
-
-
-
-
-
+# MENU ======================================================================
 Menu = React.createClass
-  getInitialState: ->
-    searchOpen: true
-
-  toggleInput: ->
-    @setState searchOpen: !@state.searchOpen
-
   onSubmit: (e) ->
     e.preventDefault()
-
     @props.parseSoundcloud(@refs.urlVal.getDOMNode().value)
+
   render: ->
     <div className="menu #{if @props.menuOpen then 'visible' else ''}">
         <h2>Shibecloud exalts the best out of the comments on your soundcloud track by displaying them in a way it can be better understood and appreciated, dogefied.</h2>
-        <div id="track-url" className="input_url #{if @state.searchOpen then 'visible' else ''}">
+        <div id="track-url" className="input_url visible">
           <h3>Place a soundcloud track url below, the more comments the merrier. </h3>
           <form onSubmit={@onSubmit}>
             <input type="text" id="track-form-input" ref="urlVal" placeholder="Ex.: https://soundcloud.com/disclosuremusic/apollo"/>
@@ -54,29 +39,7 @@ Menu = React.createClass
     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# TRACK ======================================================================
 Track = React.createClass
 
   statics:
@@ -152,7 +115,6 @@ Track = React.createClass
     @type.requestComments @props.currentTrack.uri, (r) =>
       colors = ['red', 'pink', 'lightgreen', 'green', 'yellow', 'orange', 'lightblue', 'violet', 'cyan', 'Chartreuse', 'azure']
 
-      console.log r, 'res'
       comments = r.map (comment) =>
         return {
           id:comment.id
@@ -162,7 +124,6 @@ Track = React.createClass
           left: "#{Math.random() * 100}%"
           color: colors[Math.round(Math.random() * 10)]
         }
-
       @setState comments: _.sortBy(comments, (a,b) => return a.timestamp - b.timestamp)
 
   
@@ -175,16 +136,13 @@ Track = React.createClass
         if com.body.length < 70     
           nextComments.push com
 
-
     @setState 
       nextComments:nextComments
       comments: @state.comments.diff(nextComments)
 
 
   renderItem: (comment) ->
-    console.log 'rendering?'
     visible = if ((comment.timestamp + 1000) < @props.currentTime) then '' else 'visible'
-
     return (<h4 className="comment #{visible}" key={comment.id} style={'top':comment.top, 'left':comment.left, 'color':comment.color} > {comment.body} </h4>)
 
 
@@ -192,7 +150,6 @@ Track = React.createClass
     return (<div className='doge' style={face}></div>)
 
   render: ->
-    console.log @state.nextComments
     <div id="track" style={"background-image": "url(#{if @props.currentTrack then @props.currentTrack.image else ''})"}>
       {@state.faces.map(@renderDoge)}
       <div id="track-comments">
@@ -204,22 +161,7 @@ Track = React.createClass
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# HEADER ======================================================================
 Header = React.createClass
   render: ->
     nowPlaying = if @props.nowPlaying then "play" else "pause"
@@ -233,27 +175,16 @@ Header = React.createClass
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+# MAIN ======================================================================
 MainPage = React.createClass
 
   statics:
     key: "8e02b0157f78d50db5298810ca490d0f"
     
     parseTrackUrl: (url, cb) ->
-      superagent.get "http://api.soundcloud.com/resolve.json?url=#{url}&client_id=#{@key}", (err, r) =>
-        unless r.status is 200
-          return
+      superagent.get "https://api.soundcloud.com/resolve.json?url=#{url}&client_id=#{@key}", (err, r) =>
+        # TODO - do better failing
+        unless r.status is 200 then return
         cb(r)
 
 
@@ -271,7 +202,6 @@ MainPage = React.createClass
     @audio.addEventListener "ended", @handleEnded
 
 
-
   handleEnded: ->
     console.log 'track ended dud'
 
@@ -279,11 +209,13 @@ MainPage = React.createClass
     @setState currentTime: Math.round(@audio.currentTime * 1000)
     @refs.track.updateTime()
 
-  toggleMenu: ->
+  toggleMenu: (e) ->
+    e.preventDefault()
     @setState 
       menu: !@state.menu
 
-  togglePlay: ->
+  togglePlay: (e) ->
+    e.preventDefault()
     newState = !@state.nowPlaying
     if newState then @audio.play() else @audio.pause()
     @setState nowPlaying: newState
@@ -291,17 +223,13 @@ MainPage = React.createClass
 
   initTrack: (val) ->
     track_url = val
-
     @type.parseTrackUrl track_url, (r) =>
-      track = {
+      track = 
         image: if r.body.artwork_url? then r.body.artwork_url.replace('large', 't500x500') else null
         title: r.body.title
         uri: r.body.uri
-      }
-
-
+      
       if track.uri
-
         @setState currentTrack: track
         @initCurrentTrack()
 
@@ -312,14 +240,8 @@ MainPage = React.createClass
   initCurrentTrack: (t) ->
     @setState coldPlayer:false
     @setState menu:false
-
     @setState nowPlaying:true
     @refs.track.initCurrentTrack()
-
-    # @play()
-
-
-
 
   currentTrackStream: ->
     url = ""
@@ -342,10 +264,7 @@ MainPage = React.createClass
 
 
 
-
-
-
-
+# APP ======================================================================
 App = React.createClass
   render: ->
     <html>
@@ -364,8 +283,11 @@ App = React.createClass
       </Pages>
     </html>
 
-module.exports = App;
 
+
+
+
+module.exports = App
 if typeof window isnt "undefined"
   window.onload = ->
     React.renderComponent App(), document
