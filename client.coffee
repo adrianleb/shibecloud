@@ -182,7 +182,7 @@ MainPage = React.createClass
     key: "8e02b0157f78d50db5298810ca490d0f"
     
     parseTrackUrl: (url, cb) ->
-      superagent.get "https://api.soundcloud.com/resolve.json?url=#{url}&client_id=#{@key}", (err, r) =>
+      superagent.get "//api.soundcloud.com/resolve.json?url=#{url}&client_id=#{@key}", (err, r) =>
         # TODO - do better failing
         unless r.status is 200 then return
         cb(r)
