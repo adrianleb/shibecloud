@@ -31,9 +31,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "supervisor -i node_modules -e coffee,cjsx server.coffee",
+    "start-dev": "supervisor -i node_modules -e coffee,cjsx server.coffee",
     "build": "NODE_ENV=production browserify ./ | uglifyjs -cm 2>/dev/null > ./assets/bundle.js",
-    "start-prod": "NODE_ENV=production coffee server.coffee",
+    "start": "NODE_ENV=production coffee server.coffee",
     "clean": "rm -f ./assets/bundle.js"
   },
   "author": "",
