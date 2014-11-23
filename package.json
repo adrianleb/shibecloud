@@ -1,7 +1,7 @@
 {
-  "name": "react-coffee-quickstart",
+  "name": "shibecloud.com",
   "version": "0.0.0",
-  "description": "React/CoffeeScript project",
+  "description": "soundcloud comments dogefied.",
   "main": "./server.coffee",
   "browser": "./client.coffee",
   "browserify": {
@@ -19,13 +19,13 @@
     "stylus": "*",
     "nib": "*",
     "fibers": "~1.0.1",
-    "coffee-script": "*"
-  },
-  "devDependencies": {
     "cjsxify": "~0.2.5",
     "envify": "~1.2.0",
     "browserify": "~3.44.2",
     "connect-browserify": "~2.0.1",
+    "coffee-script": "*"
+  },
+  "devDependencies": {
     "uglify-js": "~2.4.13",
     "supervisor": "~0.6.0"
   },
