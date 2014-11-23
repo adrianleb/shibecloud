@@ -274,7 +274,7 @@ App = React.createClass
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=no"/>
         
         <script src="/assets/FCClientJS.js" />
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"/>
         <script src="/assets/bundle.js" />
       </head>
       <Pages className="App" path={@props.path}>
