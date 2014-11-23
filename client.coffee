@@ -4,6 +4,13 @@ Array::diff = (a) ->
   @filter (i) ->
     a.indexOf(i) < 0
 
+
+urlParams = ->
+  search = location.search.substring(1)
+  (if search then JSON.parse("{\"" + search.replace(/&/g, "\",\"").replace(RegExp("=", "g"), "\":\"") + "\"}", (key, value) ->
+    (if key is "" then value else decodeURIComponent(value))
+  ) else {})
+
 React       = require("react")
 ReactAsync  = require("react-async")
 ReactRouter = require("react-router-component")
@@ -197,10 +204,19 @@ MainPage = React.createClass
 
 
   componentDidMount: ->
+
+    activeUrl = urlParams().url
     @audio = @refs.audioPlayer.getDOMNode()
     @audio.addEventListener "timeupdate", @updateTime
     @audio.addEventListener "ended", @handleEnded
 
+    window.addEventListener "popstate", (e) =>
+      activeUrl = urlParams().url
+      if activeUrl and activeUrl isnt @state.trackUrl
+        @initTrack activeUrl
+
+    if activeUrl
+      @initTrack activeUrl
 
   handleEnded: ->
     console.log 'track ended dud'
@@ -222,22 +238,26 @@ MainPage = React.createClass
 
 
   initTrack: (val) ->
-    track_url = val
-    @type.parseTrackUrl track_url, (r) =>
-      track = 
-        image: if r.body.artwork_url? then r.body.artwork_url.replace('large', 't500x500') else null
-        title: r.body.title
-        uri: r.body.uri
-      
-      if track.uri
-        @setState currentTrack: track
-        @initCurrentTrack()
+    currentTrackUrl = @state.trackUrl
+    unless val is currentTrackUrl
+      @setState trackUrl: val  
+      @type.parseTrackUrl val, (r) =>
+        track = 
+          image: if r.body.artwork_url? then r.body.artwork_url.replace('large', 't500x500') else null
+          title: r.body.title
+          uri: r.body.uri
+        
+        if track.uri
+          @setState currentTrack: track
+          @initCurrentTrack()
 
 
       
 
 
   initCurrentTrack: (t) ->
+    unless urlParams().url is @state.trackUrl
+      @props.app.refs.router.navigate("/?url=#{encodeURIComponent(@state.trackUrl)}")
     @setState coldPlayer:false
     @setState menu:false
     @setState nowPlaying:true
@@ -277,9 +297,8 @@ App = React.createClass
         <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"/>
         <script src="/assets/bundle.js" />
       </head>
-      <Pages className="App" path={@props.path}>
-        <Page path="/" handler={MainPage} />
-        <NotFound handler={NotFoundHandler} />
+      <Pages className="App" path={@props.path} ref="router" >
+        <Page path="/*" handler={MainPage} app={@} />
       </Pages>
     </html>
 
