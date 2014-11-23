@@ -61,5 +61,5 @@ app
   .use("/assets", express.static(path.join(__dirname, "assets")))
   .use("/api", api)
   .use(renderApp)
-  .listen 3000, ->
-    console.log "Point your browser at http://localhost:3000"
+  .listen process.env.PORT || 3000, ->
+    console.log "Point your browser at http://localhost:#{process.env.PORT || 3000}"
