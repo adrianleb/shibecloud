@@ -1,0 +1,41 @@
+{
+  "name": "react-coffee-quickstart",
+  "version": "0.0.0",
+  "description": "React/CoffeeScript project",
+  "main": "./server.coffee",
+  "browser": "./client.coffee",
+  "browserify": {
+    "transform": [
+      ["cjsxify"]
+    ]
+  },
+  "dependencies": {
+    "react": "~0.10.0",
+    "react-async": "~0.9.1",
+    "react-router-component": "~0.18.2",
+    "express": "~4.1.1",
+    "node-cjsx": "~0.1.2",
+    "superagent": "~0.18.0",
+    "stylus": "*",
+    "nib": "*",
+    "fibers": "~1.0.1",
+    "coffee-script": "*"
+  },
+  "devDependencies": {
+    "cjsxify": "~0.2.5",
+    "envify": "~1.2.0",
+    "browserify": "~3.44.2",
+    "connect-browserify": "~2.0.1",
+    "uglify-js": "~2.4.13",
+    "supervisor": "~0.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "supervisor -i node_modules -e coffee,cjsx server.coffee",
+    "build": "NODE_ENV=production browserify ./ | uglifyjs -cm 2>/dev/null > ./assets/bundle.js",
+    "start-prod": "NODE_ENV=production coffee server.coffee",
+    "clean": "rm -f ./assets/bundle.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
