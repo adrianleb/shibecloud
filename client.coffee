@@ -33,7 +33,7 @@ Menu = React.createClass
 
   render: ->
     <div className="menu #{if @props.menuOpen then 'visible' else ''}">
-        <h2>Shibecloud exalts the best from the comments of a soundcloud track by displaying them in a way they can be better understood and appreciated, dogefied.</h2>
+        <h2>Shibecloud exalts the best from the comments of a Soundcloud track by displaying them in a way they can be better understood and appreciated, dogefied.</h2>
         <div id="track-url" className="input_url visible">
           <h3>Place a soundcloud track url below, the more comments the merrier. </h3>
           <form onSubmit={@onSubmit}>
@@ -271,7 +271,7 @@ MainPage = React.createClass
 
 
   render: ->
-    <main id="main" className="#{if not @state.menu then 'menu_visible_off' else ''} #{if @state.coldPlayer then 'cold-player' else ''}">
+    <div id="main" className="#{if not @state.menu then 'menu_visible_off' else ''} #{if @state.coldPlayer then 'cold-player' else ''}">
       <div className="logo" />
 
       <Header toggleMenu={@toggleMenu} nowPlaying={@state.nowPlaying} togglePlay={@togglePlay}/>
@@ -279,7 +279,7 @@ MainPage = React.createClass
         <div id="bg" style={"background-image": "url(#{if @state.currentTrack then @state.currentTrack.image else ''})"} ></div>
         <Track ref="track" currentTrack={@state.currentTrack} currentTime={@state.currentTime} comments={@state.comments} faces={@state.faces}/>
         <audio id="audio" autoPlay="true" src="#{@currentTrackStream()}" ref="audioPlayer"></audio>
-    </main>
+    </div>
 
 
 
@@ -299,4 +299,4 @@ App = React.createClass
 module.exports = App
 if typeof window isnt "undefined"
   window.onload = ->
-    React.renderComponent App(), document.body
+    React.renderComponent App(), document.getElementById('app')

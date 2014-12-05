@@ -19,13 +19,15 @@ body, html
   outline: none
   -webkit-font-smoothing: antialiased
   text-rendering: optimizeLegibility
-#main
+#main, #app
   position: absolute
   min-height: 100%
   top: 0
   width: 100%
   display: block
   overflow: hidden
+#app
+  position relative
 #bg
   position: fixed
   top: -10%
@@ -352,6 +354,7 @@ header
     display: block
     z-index: 1
     position: absolute
+    font-size 1.6rem
     text-shadow: 0 1px 1px black
     font-family: "comic sans ms"
     opacity: 0
