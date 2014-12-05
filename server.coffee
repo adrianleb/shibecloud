@@ -2,6 +2,7 @@ require('coffee-script').register()
 path        = require("path")
 url         = require("url")
 express     = require("express")
+exphbs = require('express-handlebars')
 browserify  = require("connect-browserify")
 ReactAsync  = require("react-async")
 nodejsx     = require("node-cjsx").transform()
@@ -14,27 +15,22 @@ development = process.env.NODE_ENV isnt "production"
 
 
 
-renderApp = (req, res, next) ->
+renderApp = (req, res, next) =>
   path = url.parse(req.url).pathname
   app = App(path: path)
-  ReactAsync.renderComponentToStringWithAsyncState app, (err, markup) ->
+  ReactAsync.renderComponentToStringWithAsyncState app, (err, markup) =>
     return next(err) if err
-    res.send "<!doctype html>\n" + markup
-
-
-
-
-
-api = express().get("/users/:username", (req, res) ->
-  username = req.params.username
-  res.send
-    username: username
-    name: username.charAt(0).toUpperCase() + username.slice(1)
-)
+    res.header('Content-Type', 'text/html')
+    res.render 'home', {markup: markup}
+      
 
 
 
 app = express()
+
+app.engine('handlebars', exphbs({ defaultLayout: 'main'}))
+app.set('view engine', 'handlebars')
+
 
 app.use stylus.middleware(
   src: __dirname + "/stylesheets"
@@ -59,7 +55,6 @@ if development
 
 app
   .use("/assets", express.static(path.join(__dirname, "assets")))
-  .use("/api", api)
   .use(renderApp)
   .listen process.env.PORT || 3000, ->
     console.log "Point your browser at http://localhost:#{process.env.PORT || 3000}"

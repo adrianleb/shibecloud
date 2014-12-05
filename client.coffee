@@ -33,7 +33,7 @@ Menu = React.createClass
 
   render: ->
     <div className="menu #{if @props.menuOpen then 'visible' else ''}">
-        <h2>Shibecloud exalts the best out of the comments on your soundcloud track by displaying them in a way it can be better understood and appreciated, dogefied.</h2>
+        <h2>Shibecloud exalts the best from the comments of a soundcloud track by displaying them in a way they can be better understood and appreciated, dogefied.</h2>
         <div id="track-url" className="input_url visible">
           <h3>Place a soundcloud track url below, the more comments the merrier. </h3>
           <form onSubmit={@onSubmit}>
@@ -127,8 +127,8 @@ Track = React.createClass
           id:comment.id
           timestamp:comment.timestamp
           body:@type.dogefyText(comment.body)
-          top: "#{Math.random() * 100}%"
-          left: "#{Math.random() * 100}%"
+          top: "#{Math.random() * 80}%"
+          left: "#{Math.random() * 80}%"
           color: colors[Math.round(Math.random() * 10)]
         }
       @setState comments: _.sortBy(comments, (a,b) => return a.timestamp - b.timestamp)
@@ -287,20 +287,10 @@ MainPage = React.createClass
 # APP ======================================================================
 App = React.createClass
   render: ->
-    <html>
-      <head>
-        <link rel="stylesheet" href="/assets/style.css" />
+    <Pages className="App" path={@props.path} ref="router" >
+      <Page path="/*" handler={MainPage} app={@} />
+    </Pages>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=no"/>
-        
-        <script src="/assets/FCClientJS.js" />
-        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"/>
-        <script src="/assets/bundle.js" />
-      </head>
-      <Pages className="App" path={@props.path} ref="router" >
-        <Page path="/*" handler={MainPage} app={@} />
-      </Pages>
-    </html>
 
 
 
@@ -309,4 +299,4 @@ App = React.createClass
 module.exports = App
 if typeof window isnt "undefined"
   window.onload = ->
-    React.renderComponent App(), document
+    React.renderComponent App(), document.body

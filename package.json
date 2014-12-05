@@ -16,6 +16,7 @@
     "express": "~4.1.1",
     "node-cjsx": "~0.1.2",
     "superagent": "~0.18.0",
+    "express-handlebars": "~1.1.0",
     "stylus": "*",
     "nib": "*",
     "fibers": "~1.0.1",
@@ -36,6 +37,10 @@
     "start": "NODE_ENV=production coffee server.coffee",
     "clean": "rm -f ./assets/bundle.js"
   },
-  "author": "",
+    "repository": {
+    "type": "git",
+    "url": "git://github.com/adrianleb/shibecloud"
+  },
+  "author": "Adrian le Bas",
   "license": "MIT"
 }
