@@ -327,11 +327,10 @@ header
   background-size: cover
   width: 56rem
   position: absolute
-  left: 60.5%
+  left: 50%
   top: 50%
   -webkit-transition: all 0.15s ease-out
-  margin-top: -28rem
-  margin-left: -28rem
+  transform: translate(-40%, -50%);
   height: 56rem
   display: block
   border: 20px solid white
@@ -340,6 +339,8 @@ header
   .cold-player &
     opacity 0.1
   .menu_visible_off &
+    transform: translate(-50%, -50%);
+    
     left: 50%
   #track-comments
     position: absolute
@@ -399,3 +400,41 @@ header
     border none
     // padding 10rem
     background-color transparent
+    
+@media (max-width: 620px)
+  header
+    margin-left 5%
+  .menu
+    width 90%
+    max-width 90%
+    margin-left 5%
+    margin-right 5%
+    
+  #track
+    width 36rem    
+    height 36rem   
+    border-width 1.2rem
+  #track-comments h4
+    font-size 1.4rem 
+    
+@media (max-width: 420px)
+ .input_url form
+    height auto 
+  .input_url input[type="text"], .input_url input[type="submit"]
+    width 100%
+    display block
+    margin-left 0
+  .menu
+    text-align center
+  #track
+    width 28rem    
+    height 28rem   
+    border-width 0.8rem
+  #track-comments h4
+    font-size 1.2rem 
+
+@media (max-width: 320px)
+  header
+    margin-left 0
+    margin-right 0
+    
